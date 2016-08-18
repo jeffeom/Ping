@@ -151,8 +151,14 @@
 //    NewEventViewController *newEventVC = [storyboard instantiateViewControllerWithIdentifier:@"NewEventViewController"];
     EventListViewController *eventListVC = [storyboard instantiateViewControllerWithIdentifier:@"EventListViewController"];
     
+    eventListVC.userManager = [[UserManager alloc] init];
+    [eventListVC.userManager fetchUsersWthCompletion:^(NSArray *users) {}];
+    
     self.window.rootViewController = eventListVC;
     [self.window makeKeyAndVisible];
+    
+    eventListVC.userManager = [[UserManager alloc] init];
+    [eventListVC.userManager fetchUsersWthCompletion:^(NSArray *users) {}];
     
     [eventListVC performSegueWithIdentifier:@"showNewEventViewSegueNoAnimation" sender:nil];
 
@@ -164,6 +170,9 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     EventListViewController *eventListVC = [storyboard instantiateViewControllerWithIdentifier:@"EventListViewController"];
+    
+    eventListVC.userManager = [[UserManager alloc] init];
+    [eventListVC.userManager fetchUsersWthCompletion:^(NSArray *users) {}];
     
     self.window.rootViewController = eventListVC;
     [self.window makeKeyAndVisible];
@@ -178,7 +187,6 @@
     
     eventListVC.userManager = [[UserManager alloc] init];
     [eventListVC.userManager fetchUsersWthCompletion:^(NSArray *users) {}];
-    
     
     self.window.rootViewController = eventListVC;
     [self.window makeKeyAndVisible];

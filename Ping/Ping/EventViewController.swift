@@ -18,9 +18,11 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
     //MARK: Properties 
     var event:Event!
     var userManager:UserManager!
-    var timePeriods = [TimePeriod]()
+    var timePeriods:[TimePeriod]? // note can't be nil if no timePeriods will have empty array
     var uuids = [String]()
     var currentTimePeriod:TimePeriod?
+    // Definint theme background color:
+    let thmeBackGroundColor = UIColor(netHex:0xD9FAAA)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +30,19 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         
+        tableView.backgroundColor = thmeBackGroundColor
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.tableFooterView = UIView(frame: CGRectZero)
+        
         timeSlider.minimumValue = 0
         
         updateTimePeriods()
         timeSlider.value = timeSlider.maximumValue
         
         currentTimePeriod = getCurrentTimePeriodForSliderValue(UInt(timeSlider.value))
+        uuids = getUUIDsForTimePeriod(currentTimePeriod)
         
-        uuids = getUUIDsForTimePeriod(currentTimePeriod!)
-        
-        if let startTime = currentTimePeriod!.startTime {
+        if let startTime = currentTimePeriod?.startTime {
             updateDateLabelWithDate(startTime)
         }
         
@@ -52,25 +57,41 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func updateTimePeriods() {
         
-        self.timePeriods = TimePeriod.sortArray(event.timePeriods, byDateAscending: true) as![TimePeriod] //implemented in objective-C because realm-objective-C hates swift
+        self.timePeriods = TimePeriod.sortArray(event.timePeriods, byDateAscending: true) as?[TimePeriod] //implemented in objective-C because realm-objective-C hates swift
         
-        let timePeriods = self.timePeriods
-        
-        if timePeriods.count > 0 {
-            timeSlider.maximumValue = Float(timePeriods.count) - 1
-            return
+        if let timePeriods = self.timePeriods {
+            
+            if timePeriods.count > 0 {
+                timeSlider.maximumValue = Float(timePeriods.count) - 1
+                return
+            }
+            
+            timeSlider.maximumValue = 0
+            
         }
-        
-        timeSlider.maximumValue = 0
     }
 
-    func getCurrentTimePeriodForSliderValue(sliderValue:UInt) -> TimePeriod {
-        return self.timePeriods[Int(sliderValue)] 
+    
+    func getCurrentTimePeriodForSliderValue(sliderValue:UInt) -> TimePeriod? {
+        
+        if let timePeriods = timePeriods {
+            if timePeriods.count != 0 {
+                if Int(sliderValue) < timePeriods.count {
+                    return timePeriods[Int(sliderValue)]
+                }
+            }
+        }
+        return nil
     }
     
-    func getUUIDsForTimePeriod(timePeriod:TimePeriod) -> [String] {
+    func getUUIDsForTimePeriod(timePeriod:TimePeriod?) -> [String] {
         let recMan = RecordManager()
-        return recMan.UUIDsSortedAtTime(timePeriod.startTime)
+        
+        if let timePeriod = timePeriod {
+            return recMan.UUIDsSortedAtTime(timePeriod.startTime)
+        } else {
+            return [String]()
+        }
     }
     
     func updateDateLabelWithDate(date:NSDate) {
@@ -102,6 +123,17 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
         LISDKDeeplinkHelper.sharedInstance().viewOtherProfile(user.linkedInID, withState: "eventCellSelected", showGoToAppStoreDialog: false, success: nil, error: nil)
     }
     
+    func colorForIndex(index: Int) -> UIColor {
+        
+        let userCount = uuids.count - 1
+        let transparency = (CGFloat(index) / CGFloat(userCount)) * 0.6
+        return UIColor(red: 0.44314, green: 0.95686, blue: 0.81961, alpha: transparency)
+        
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = colorForIndex(indexPath.row)
+    }
     
     // MARK: Actions
     
@@ -111,9 +143,12 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // ToDo Refactor so we are reordering cells, inserting and deleting instead of reloading table view
         currentTimePeriod = getCurrentTimePeriodForSliderValue(UInt(timeSlider.value))
-        uuids = getUUIDsForTimePeriod(currentTimePeriod!)
-        updateDateLabelWithDate(currentTimePeriod!.startTime)
-        tableView.reloadData()
+        
+        if let currentTimePeriod = currentTimePeriod {
+            
+            uuids = getUUIDsForTimePeriod(currentTimePeriod)
+            tableView.reloadData()
+        }
         
     }
     
@@ -121,7 +156,12 @@ class EventViewController: UIViewController, UITableViewDataSource, UITableViewD
         // ToDo Make Dry, code repeated in timeSliderFinishSliding
         timeSlider.value = roundf(sender.value)
         currentTimePeriod = getCurrentTimePeriodForSliderValue(UInt(timeSlider.value))
-        updateDateLabelWithDate(currentTimePeriod!.startTime)
+        
+        if let currentTimePeriod = currentTimePeriod {
+            updateDateLabelWithDate(currentTimePeriod.startTime)
+        } else {
+            updateDateLabelWithDate(event.startTime)
+        }
     }
     
 

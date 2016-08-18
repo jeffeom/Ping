@@ -32,17 +32,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewWillAppear(animated: Bool) {
-//        
-//        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//        
-//        if (appDelegate.userShouldBeDirectedToNewEventViewController) {
-//            // If user selects create event shortcut, direct him to NeweventVC
-//            self.performSegueWithIdentifier("showNewEventViewSegueNoAnimation", sender: self)
-//        } else if (appDelegate.userShouldBeDirectedToCurrentSurroundingsViewController){
-//            // If selected CurrentsurroundingsVC
-//            self.performSegueWithIdentifier("showCurrentSurroundingsNoAnimation", sender: self)
-//        } else {
-        
+
             events = CurrentUser.getCurrentUser().fetchEvents();
             eventListTableView.reloadData()
             
@@ -73,16 +63,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! EventListTableViewCell
+
+        cell.selectionStyle = UITableViewCellSelectionStyle.Gray // ToDo move into cell class
         
-        cell.eventTitleLabel.text = events[indexPath.row].eventName
-        cell.eventTimeLabel.text = String(events[indexPath.row].startTime)
-        
-        cell.eventTitleLabel.textColor = UIColor.blackColor()
-        cell.eventTitleLabel.backgroundColor = UIColor.clearColor()
-        cell.selectionStyle = UITableViewCellSelectionStyle.Gray
-        
-        cell.eventTimeLabel.textColor = UIColor.blackColor()
-        cell.eventTimeLabel.backgroundColor = UIColor.clearColor()
+        cell.configureWithEvent(events[indexPath.row])
         
         return cell
         
@@ -129,11 +113,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 //            }else{
 //                print("Could not find array of notifications")
 //            }
-//            
-//            
-//            events.removeAtIndex(indexPath.row)
-//            self.eventListTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
-//        
+            
+            // Deleting event from table(row) local array and realm
+            
+            
+            let eventRecordManager = RecordManager()
+            eventRecordManager.deleteEvent(events[indexPath.row])
+            events.removeAtIndex(indexPath.row)
+            self.eventListTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+
         }
     }
     
@@ -173,7 +161,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func addEventButtonPressed(sender: AnyObject) {
-        self .performSegueWithIdentifier("showNewEventViewSegue", sender: self)
+        self.performSegueWithIdentifier("showNewEventViewSegue", sender: self)
     }
     
     // MARK: - Navigation
@@ -186,14 +174,19 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             let event = events[indexPath.row]
             if let vc = segue.destinationViewController as? EventViewController {
                 vc.event = event
-                vc.userManager = userManager
+                vc.userManager = self.userManager
             }
             
         } else if identifier == "showCurrentSurroundings" {
             if let vc = segue.destinationViewController as? CurrentSurroundingsViewController {
                 vc.userManager = self.userManager
             }
+        } else if identifier == "showCurrentSurroundingsNoAnimation" {
+            if let vc = segue.destinationViewController as? CurrentSurroundingsViewController {
+                vc.userManager = self.userManager
+            }
         }
+        
         
     }
     

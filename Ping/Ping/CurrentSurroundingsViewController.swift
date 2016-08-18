@@ -25,7 +25,9 @@ class CurrentSurroundingsViewController: UIViewController, UITableViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         userManager!.fetchUsersWthCompletion { (userArray) in
+            self.btm.setUpBluetooth()
             self.updateTableView()
         }
         
@@ -64,6 +66,13 @@ class CurrentSurroundingsViewController: UIViewController, UITableViewDelegate, 
         cell.backgroundColor =  colorForIndex(indexPath.row)
     }
     
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let user = users[indexPath.row]
+        LISDKDeeplinkHelper.sharedInstance().viewOtherProfile(user.linkedInID, withState: "eventCellSelected", showGoToAppStoreDialog: false, success: nil, error: nil)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
     // MARK: Custom Methods
     
     func updateTableView() {
@@ -74,7 +83,6 @@ class CurrentSurroundingsViewController: UIViewController, UITableViewDelegate, 
                 activityIndicator.startAnimating()
             }
             
-            btm.setUpBluetooth()
             
             NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector:#selector(CurrentSurroundingsViewController.updateTableView), userInfo: nil, repeats: false)
             
@@ -111,7 +119,13 @@ class CurrentSurroundingsViewController: UIViewController, UITableViewDelegate, 
     // MARK: Actions
     
     @IBAction func backButtonPressed(sender: AnyObject) {
+        
+        // *******************************************************************************************
+        
         btm.stop()
+        
+        // Creating an event each time user presses current surrounding button, should the app stop transmitting BT data after the user leaves the view or keep it going?
+        // *******************************************************************************************
         performSegueWithIdentifier("currentSurroundingsToEventList", sender: self)
     }
     
@@ -123,20 +137,3 @@ class CurrentSurroundingsViewController: UIViewController, UITableViewDelegate, 
     }
 
 }
-
-
-
-
-//extension UIColor {
-//    convenience init(red: Int, green: Int, blue: Int) {
-//        assert(red >= 0 && red <= 255, "Invalid red component")
-//        assert(green >= 0 && green <= 255, "Invalid green component")
-//        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-//        
-//        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-//    }
-//    
-//    convenience init(netHex:Int) {
-//        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
-//    }
-//}

@@ -180,9 +180,9 @@
 		5594DAFA1D45E2DE0096D5DF /* Ping */ = {
 			isa = PBXGroup;
 			children = (
-				5548D0CE1D5FD98D006A78F9 /* TempFiles/DevTesting */,
 				5594DAFE1D45E2DE0096D5DF /* AppDelegate.h */,
 				5594DAFF1D45E2DE0096D5DF /* AppDelegate.m */,
+				5548D0CE1D5FD98D006A78F9 /* TempFiles/DevTesting */,
 				55A0985A1D46CAE7005100BC /* View */,
 				55A098501D46CA69005100BC /* ViewControllers */,
 				55A098591D46CAD2005100BC /* Model */,

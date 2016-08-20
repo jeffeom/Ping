@@ -11,7 +11,6 @@ Ping measures the distance between users at networking events using Bluetooth ru
  1. Pre-populate the list of events with 3rd party API's such as meet-up
  2. Add geo-fencing to insure that the user is at the event before turning on the bluetooth 
  3. add a comment field to table view cells so users can make notes about people they have met (comments would be stored locally) 
- 4. 
  
 ### Tech Used
  1. Core Bluetooth 

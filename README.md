@@ -26,7 +26,7 @@ Ping measures the distance between users at networking events using Bluetooth ru
 
 ## Screen Shots
 
-![alt text](./screenShots/Onboarding1.png)
+![alt text](.screenShots/Onboarding1.png)
 ![alt text](./screenShots/Onboarding2.png)
 ![alt text](./screenShots/Onboarding3.png)
 ![alt text](./screenShots/Onboarding4.png)

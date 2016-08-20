@@ -12,7 +12,7 @@ Ping measures the distance between users at networking events using Bluetooth ru
  2. Add geo-fencing to insure that the user is at the event before turning on the bluetooth 
  3. add a comment field to table view cells so users can make notes about people they have met (comments would be stored locally) 
  
-### Tech Used
+## Tech Used
  1. Core Bluetooth 
  2. Realm 
  3. Parse
@@ -24,4 +24,10 @@ Ping measures the distance between users at networking events using Bluetooth ru
  9. GooglePlaces
  10. Local Notifications 
 
+## Screen Shots
+
+![alt text](./screenShots/Onboarding1.png)
+![alt text](./screenShots/Onboarding2.png)
+![alt text](./screenShots/Onboarding3.png)
+![alt text](./screenShots/Onboarding4.png)
 

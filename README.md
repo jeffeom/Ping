@@ -30,4 +30,8 @@ Ping measures the distance between users at networking events using Bluetooth ru
 ![alt text](./screenShots/Onboarding2.png)
 ![alt text](./screenShots/Onboarding3.png)
 ![alt text](./screenShots/Onboarding4.png)
-
+![alt text](./screenShots/Onboarding4.png)
+![alt text](./screenShots/Onboarding4.png)
+![alt text](./screenShots/Onboarding4.png)
+![alt text](./screenShots/Onboarding4.png)
+![alt text](./screenShots/Onboarding4.png)

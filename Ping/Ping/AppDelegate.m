@@ -18,11 +18,11 @@
 #import <linkedin-sdk/LISDK.h>
 
 #import <Parse/Parse.h>
-#define Parse_APP_ID @"***REMOVED***"
-#define Parse_Client_Key @"***REMOVED***"
+#define Parse_APP_ID @"QaDwdtxkrP8gd42kZrvn1aHv64PKRNLxuuHY964v"
+#define Parse_Client_Key @"AZ8btrgurhLG306dVeWjKjx9nSszPI5sAoqwcZ6F"
 
 @import GooglePlaces;
-#define GOOGLE_KEY @"***REMOVED***"
+#define GOOGLE_KEY @"AIzaSyAUSze3iQQHpyNSQhmZCpaMKCu8ZrRV22c"
 
 @implementation AppDelegate
 
